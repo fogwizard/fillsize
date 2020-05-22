@@ -7,16 +7,17 @@
 
 using namespace std;
 
-void usage(void)
+int usage(void)
 {
     cout << "Usage: fillsize <filename> [address]" << endl;
+    return 0;
 }
 
 int main(int argc, const char *argv[])
 {
     /* check argc */
     if((2 != argc) && (3 != argc)) {
-        usage();
+        return usage();
     }
 
     /* check input file */
