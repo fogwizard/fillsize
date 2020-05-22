@@ -38,6 +38,7 @@ void fillVal::check_versionfile(void)
         write_revsion_flag = 1;
         cout << "write version info at:" << default_addr << endl;
     } else {
+        write_revsion_flag = 0;
         cout << "version file not found, bypass write version number" << endl;
     }
 }
@@ -52,8 +53,9 @@ void fillVal::fill_size(void)
 
 void fillVal::fill_version(void)
 {
-    if(write_revsion_flag)
+    if(write_revsion_flag) {
         fill_uint32_at(INC(default_addr), revsion, in_file);
+    }
 }
 
 uint32_t fillVal::input_bin_file_length(const char *input_bin_file)
