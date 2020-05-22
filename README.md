@@ -1,8 +1,9 @@
 # fillsize
-A tool to fill file size at user define address.<br> Address 0x1c will be use if not privided.
+A tool to fill file size at user define address. Address 0x1c will be use if not privided.
 
 # usage 
-Usage: fillsize \<filename\> [address]
+Usage: fillsize \<filename\> [address]<br>
+	address could be 0x1C in hex mode or 28 in dec mode
 # info
 version is append if file ../platform/include/rev_integer.h is exist.
 # example
