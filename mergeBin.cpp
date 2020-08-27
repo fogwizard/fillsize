@@ -98,10 +98,10 @@ void mergeBin::fill_magic(void)
     int offset =  default_addr + real_length + 512;
     cout << "magic: fill_offset=" << offset << endl;
     dat = &user_ptr[offset];
-    dat[0] = 'a';
-    dat[1] = 'b';
-    dat[2] = 'l';
-    dat[3] = 'e';
+    dat[3] = 'a';
+    dat[2] = 'b';
+    dat[1] = 'l';
+    dat[0] = 'e';
 
     ofstream fout("merge.bin", ios::binary);
     fout.write(user_ptr, offset + 4);
