@@ -28,7 +28,7 @@ void alignBin::do_align(void)
         ofstream of;
         of.open(in_file, std::ios_base::app);
         if(of.is_open()) {
-            char buf[1] = { 0x00};
+            char buf[1] = { 0xFF};
             for(int i = 0; i < append; i++) {
                 of.write(buf, sizeof(buf));
             }
