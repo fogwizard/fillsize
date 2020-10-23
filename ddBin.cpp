@@ -2,29 +2,26 @@
 #include "ddbin.h"
 #include <fstream>
 
-#define INC(n) (n+sizeof(n))
-
 using namespace std;
 
 ddBin::ddBin(const char *file_in, const char *file_out)
 {
 
     int length  = input_bin_file_length(file_in);
-    char *buffer = static_cast<char *>(malloc(length));
 
     {
-        ifstream in(file_in);
-        in.read(buffer,sizeof(length));
+        char *buffer = static_cast<char *>(malloc(length));
+        ifstream in(file_in, ios::in | ios::binary);
+        in.read(buffer,length);
         in.close();
+        ofstream out(file_out, ios::out | ios::binary);
+        out.write(buffer, length);
+        out.close();
+        free(buffer);
     }
 
-    ofstream out(file_out);
-    out.write(buffer, length);
-    out.close();
 
     cout << "dd: write count=" << length << endl;
-
-    free(buffer);
 }
 
 
@@ -35,15 +32,15 @@ ddBin::ddBin(const char *file_in, const char *file_out, const char * out_size)
     char *buffer = static_cast<char *>(malloc(length));
 
     {
-        ifstream in(file_in);
-        in.read(buffer,sizeof(length));
+        ifstream in(file_in, ios::in | ios::binary);
+        in.read(buffer,length);
         in.close();
     }
 
     if(out_len > length) {
         int append = out_len  - length;
         cout << "out_len > length, fill " << append << " byte with 0xFF" << endl;
-        ofstream out(file_out);
+        ofstream out(file_out, ios::out | ios::binary);
         out.write(buffer, length);
         buffer[0] = static_cast<char>(0xff);
         for(int i = 0; i < append; i++) {
@@ -52,7 +49,7 @@ ddBin::ddBin(const char *file_in, const char *file_out, const char * out_size)
         out.close();
         cout << "dd: write count=" << length << " + " << append << endl;
     } else {
-        ofstream out(file_out);
+        ofstream out(file_out, ios::out | ios::binary);
         out.write(buffer, out_len);
         out.close();
         cout << "dd: write count=" << out_len << endl;
@@ -75,7 +72,7 @@ ddBin::ddBin(const char *file_in, const char *file_out, const char *skip, const 
     }
 
     {
-        ifstream in(file_in);
+        ifstream in(file_in, ios::in | ios::binary);
         in.read(buffer,skip_len);
         in.read(buffer,length - skip_len);
         in.close();
@@ -84,7 +81,7 @@ ddBin::ddBin(const char *file_in, const char *file_out, const char *skip, const 
     if(out_len > (length - skip_len)) {
         int append = out_len  - (length - skip_len);
         cout << "out_len > length, fill " << append << " byte with 0xFF" << endl;
-        ofstream out(file_out);
+        ofstream out(file_out, ios::out | ios::binary);
         out.write(buffer, length);
         buffer[0] = static_cast<char>(0xff);
         for(int i = 0; i < append; i++) {
@@ -93,7 +90,7 @@ ddBin::ddBin(const char *file_in, const char *file_out, const char *skip, const 
         out.close();
         cout << "dd: write count=" << length << " + " << append << endl;
     } else {
-        ofstream out(file_out);
+        ofstream out(file_out, ios::out | ios::binary);
         out.write(buffer, out_len);
         out.close();
         cout << "dd: write count=" << out_len << endl;
