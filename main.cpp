@@ -5,6 +5,7 @@
 #include "stdint.h"
 #include "fillsize.h"
 #include "mergebin.h"
+#include "alignbin.h"
 
 using namespace std;
 
@@ -20,9 +21,15 @@ int usage_merge(void)
     return 0;
 }
 
+int usage_align(void)
+{
+    cout << "Usage: fillsize -align <inFile> <alignValue>" << endl;
+    return 0;
+}
+
 int main(int argc, const char *argv[])
 {
-    if((argc >= 2) && (0 == strcmp("-merge", argv[1]))){
+    if((argc >= 2) && (0 == strcmp("-merge", argv[1]))) {
         cout << "merge function active" << endl;
         mergeBin *mf = NULL;
         if(argc != 5) {
@@ -45,6 +52,22 @@ int main(int argc, const char *argv[])
         cout << "merge function end..." << endl;
         return 0;
     }
+
+    /* align tool */
+    if((argc >= 2) && (0 == strcmp("-align", argv[1]))) {
+        if(argc != 4) {
+            return usage_align();
+        }
+        /* check input file */
+        if (-1 == access(argv[2], 0)) {
+            cout << "file:" << argv[2]  << " not exist" << endl;
+            return usage_align();
+        }
+        alignBin *ab = new alignBin(argv[2], argv[3]);
+        ab->do_align();
+        return 0;
+    }
+
     /* check argc */
     if((2 != argc) && (3 != argc)) {
         return usage();

@@ -4,7 +4,10 @@ public:
     mergeBin(const char *file_name, const char *addr, const char *app_name);
     mergeBin(const char *file_name, const char *addr);
     mergeBin(const char *file_name);
-    ~mergeBin(){if(user_ptr)delete user_ptr;}
+    ~mergeBin()
+    {
+        if(user_ptr)delete user_ptr;
+    }
     void fill_loader(void);
     void fill_app(void);
     void fill_magic(void);
