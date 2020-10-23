@@ -6,6 +6,7 @@
 #include "fillsize.h"
 #include "mergebin.h"
 #include "alignbin.h"
+#include "ddbin.h"
 
 using namespace std;
 
@@ -24,6 +25,12 @@ int usage_merge(void)
 int usage_align(void)
 {
     cout << "Usage: fillsize -align <inFile> <alignValue>" << endl;
+    return 0;
+}
+
+int usage_dd(void)
+{
+    cout << "Usage: fillsize -dd <inFile> <outFile> [skip] [out_length]" << endl;
     return 0;
 }
 
@@ -55,7 +62,7 @@ int main(int argc, const char *argv[])
 
     /* align tool */
     if((argc >= 2) && (0 == strcmp("-align", argv[1]))) {
-        if(argc != 4) {
+        if((argc != 4) &&(argc != 5)) {
             return usage_align();
         }
         /* check input file */
@@ -63,8 +70,40 @@ int main(int argc, const char *argv[])
             cout << "file:" << argv[2]  << " not exist" << endl;
             return usage_align();
         }
-        alignBin *ab = new alignBin(argv[2], argv[3]);
+        alignBin *ab;
+        if(4 == argc) {
+            ab = new alignBin(argv[2], argv[3]);
+        } else {
+            ab = new alignBin(argv[2], argv[3], argv[4]);
+        }
         ab->do_align();
+        return 0;
+    }
+
+    /* dd tool */
+    if((argc >= 2) && (0 == strcmp("-dd", argv[1]))) {
+        if((4 != argc) && (5 != argc) &&(6 != argc)) {
+            return usage_dd();
+        }
+        /* check input file */
+        if (-1 == access(argv[2], 0)) {
+            cout << "file:" << argv[2]  << " not exist" << endl;
+            return usage_dd();
+        }
+        ddBin *dd;
+        switch(argc) {
+        case 4:
+            dd = new ddBin(argv[2], argv[3]);
+            break;
+        case 5:
+            dd = new ddBin(argv[2], argv[3], argv[4]);
+            break;
+        case 6:
+            dd = new ddBin(argv[2], argv[3], argv[4], argv[5]);
+            break;
+
+        }
+        dd->dd();
         return 0;
     }
 

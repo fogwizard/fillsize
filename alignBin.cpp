@@ -11,6 +11,15 @@ alignBin::alignBin(const char *file_name, const char *align_value)
     in_file = file_name;
     length  = input_bin_file_length(file_name);
     align   = get_integer_from_string(align_value);
+    out_len = 0x00;
+}
+
+alignBin::alignBin(const char *file_name, const char *align_value, const char *out_length)
+{
+    in_file = file_name;
+    length  = input_bin_file_length(file_name);
+    align   = get_integer_from_string(align_value);
+    out_len = get_integer_from_string(out_length);
 }
 
 void alignBin::do_align(void)
@@ -18,6 +27,14 @@ void alignBin::do_align(void)
     uint32_t len = length + (align - 1);
     len = (~(align -1))& len;
     int append = len - length;
+
+    /* if out_length is set, reset append value */
+    if(out_len > 0) {
+        if(out_len > length) {
+            append = out_len - length;
+            cout << "align: reset append to=" << append << endl;
+        }
+    }
 
     if(0 != (align%2)) {
         cout << "align: couldn't align to=" << align << endl;
@@ -38,7 +55,7 @@ void alignBin::do_align(void)
         of.close();
     }
 
-    cout << "align: append=" << append << " byte to meet align=" << align << endl;
+    cout << "align: append=" << append << " byte to meet align=" << align << " out_len=" << out_len << endl;
 }
 
 uint32_t alignBin::get_integer_from_string(const char *str)
